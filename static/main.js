@@ -4,7 +4,7 @@ let interval = null;
 $(() => {
   $("#form").collapse("show");
   $("#send-btn").click(sendBtn);
-  $("#invoice").collapse("show");
+  $("#invoice").collapse("hide");
   $("#success-box").collapse("hide");
 });
 
@@ -38,7 +38,7 @@ const waitPayment = async (hash) => {
         clearInterval(interval);
         interval = null;
         $("#form").collapse("hide");
-        $("#invoice").collapse("show");
+        $("#invoice").collapse("hide");
         $("#success-box").collapse("show");
       }
     },
