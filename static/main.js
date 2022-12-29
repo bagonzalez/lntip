@@ -6,6 +6,7 @@ $(() => {
   $("#send-btn").click(sendBtn);
   $("#invoice").collapse("hide");
   $("#success-box").collapse("hide");
+  $("#refresh-btn").click(getListaPayments);
   getListaPayments();
 });
 
@@ -75,6 +76,8 @@ const getListaPayments = async () => {
         }
       });
 
+      $("#lista").empty();
+
       $("#lista").append(
         `<table class="table">
             <thead>
@@ -115,6 +118,7 @@ const sendBtn = async () => {
     },
     async: false,
   });
+  getListaPayments();
 };
 
 
