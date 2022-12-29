@@ -17,10 +17,22 @@ const getListaPayments = async () => {
       console.log(invoices);
       let body_table = "";
 
+      let totalAmountCompletadas = 0;
+      let totalAmountCanceladas = 0;
+      let totalAmountAbiertas = 0;
+
       invoices.forEach((invoice) => {
         let date = new Date(0);
 
         let status = "";
+
+        totalAmountCompletadas += invoice.paid ? invoice.amount : 0;
+        totalAmountCanceladas += invoice.state === 2 ? invoice.amount : 0;
+        totalAmountAbiertas += invoice.state === 0 ? invoice.amount : 0;
+
+        $("#totalAmountCompletadas").text(totalAmountCompletadas + " satoshis");
+        $("#totalAmountCanceladas").text(totalAmountCanceladas + " satoshis");
+        $("#totalAmountAbiertas").text(totalAmountAbiertas + " satoshis");
 
         if (invoice.state == 0) {
           status = "Open";

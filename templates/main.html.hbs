@@ -50,6 +50,21 @@
 </div>
   </div>
   <div class="tab-pane fade" id="Facturas" role="tabpanel" aria-labelledby="Facturas-tab">
+    <div>
+      <h1>Facturas</h1>
+      <table class="table">
+        <tr>
+          <th>Completadas</th>
+          <th>Canceladas</th>
+          <th>Pendientes</th>
+        </tr>
+        <tr>
+          <td><h2 id="totalAmountCompletadas"></h2></td>
+          <td><h2 id="totalAmountCanceladas"></h2></td>
+          <td><h2 id="totalAmountAbiertas"></h2></td>          
+        </tr>     
+      </table>
+    </div>
     <button type="button" id="refresh-btn" class="btn btn-lightbtn-lg">Actualizar</button>
     <div id="lista">
     </div>
