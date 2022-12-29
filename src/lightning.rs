@@ -44,3 +44,17 @@ pub async fn get_invoice(hash: &[u8]) -> Result<Invoice, LndClientError> {
         .into_inner();
     Ok(invoice)
 }
+
+use tonic_openssl_lnd::lnrpc::{ListInvoiceRequest, ListInvoiceResponse};
+pub async fn list_invoices() -> Result<Vec<Invoice>, LndClientError> {
+    let mut client = connect().await.unwrap();
+
+    let invoices = client
+        .list_invoices(ListInvoiceRequest {
+            ..Default::default()
+        })
+        .await?
+        .into_inner();
+
+    Ok(invoices.invoices)
+}

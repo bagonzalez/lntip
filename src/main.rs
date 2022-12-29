@@ -18,7 +18,8 @@ fn rocket() -> _ {
             routes![
                 routes::index,
                 routes::create_invoice,
-                routes::lookup_invoice
+                routes::lookup_invoice,
+                routes::list_invoices
             ],
         )
         .attach(Template::fairing()) // <--

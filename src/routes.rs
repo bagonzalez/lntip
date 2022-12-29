@@ -13,6 +13,9 @@ pub struct InvoiceResponse {
     paid: bool,
     preimage: String,
     description: String,
+    amount: i64,
+    creation_date: i64,
+    state: i32,
 }
 
 #[get("/")]
@@ -64,4 +67,45 @@ pub async fn lookup_invoice(hash: &str) -> Json<InvoiceResponse> {
         description: invoice.memo,
         ..Default::default()
     })
+}
+
+#[get("/list_invoices")]
+pub async fn list_invoices() -> Json<Vec<InvoiceResponse>> {
+    let mut invoices = lightning::list_invoices().await.unwrap();
+
+    invoices.sort_by(|a, b| b.creation_date.cmp(&a.creation_date));
+
+    let mut invoice_responses = Vec::new();
+    for invoice in invoices {
+        let hash_str = invoice
+            .r_hash
+            .iter()
+            .map(|h| format!("{h:02x}"))
+            .collect::<Vec<String>>()
+            .join("");
+        let mut preimage = String::new();
+        let mut paid = false;
+        if let Some(state) = InvoiceState::from_i32(invoice.state) {
+            if state == InvoiceState::Settled {
+                paid = true;
+                preimage = invoice
+                    .r_preimage
+                    .iter()
+                    .map(|h| format!("{h:02x}"))
+                    .collect::<Vec<String>>()
+                    .join("");
+            }
+        }
+        invoice_responses.push(InvoiceResponse {
+            payment_request: invoice.payment_request,
+            hash: hash_str,
+            paid,
+            preimage,
+            description: invoice.memo,
+            amount: invoice.value,
+            creation_date: invoice.creation_date,
+            state: invoice.state,
+        });
+    }
+    Json(invoice_responses)
 }
